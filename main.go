@@ -11,8 +11,6 @@ import (
 	"github.com/yangl900/teleport/ws"
 )
 
-var localServerHost = "localhost:8880"
-
 func main() {
 	localPort := flag.Int("port", 8002, "Local listening port.")
 
@@ -88,6 +86,12 @@ func handleConnection(c net.Conn) {
 	resp, err := getSocketURI()
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	if resp.WebsocketURI == "" {
+		log.Printf("Failed to get websocket URI. Closing connection.")
+		c.Close()
+		return
 	}
 
 	fmt.Println("Socket URI: ", resp.WebsocketURI)

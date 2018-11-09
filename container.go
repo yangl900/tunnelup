@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -39,10 +40,11 @@ func getSocketURI() (*ExecResponse, error) {
 
 	defer response.Body.Close()
 	buf, err := ioutil.ReadAll(response.Body)
-
 	if err != nil {
 		return nil, errors.New("Request failed: " + err.Error())
 	}
+
+	log.Printf("Exec response: %s", string(buf))
 
 	resp := ExecResponse{}
 	json.Unmarshal(buf, &resp)
